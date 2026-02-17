@@ -89,7 +89,7 @@ def process_language_graph(df, lang, G):
 if __name__ == "__main__":
     
     if len(sys.argv) > 2:
-        raise SystemExit("Usage: python visualizer.py <language>")
+        raise SystemExit("Usage: python visualizer.py [language]")
 
     df = pd.read_excel("TableA_94_2025.xlsx")
     possible_languages = [c.lower() for c in df.columns[3:]]
