@@ -36,11 +36,6 @@ def color_graph(G, pos=None):
         else:
             G.nodes[node]["color"] = other_nodes_color
 
-def remove_nodes(g):
-    g.remove_nodes_from([node for node in g.nodes() if all(["0" in edge[0] for edge in g.in_edges(node)]) and "0" in node ])
-    # g.remove_nodes_from(["DGR+", "DGR-", "DGR0"])
-    return g.copy()
-
 def graph_preprocessing(df):
     labels = df["Label"]
     G = nx.MultiDiGraph()
@@ -61,7 +56,6 @@ def graph_preprocessing(df):
 
 
 def process_implicational_graph(df, G):
-
     G.remove_nodes_from(list(nx.isolates(G)))
     
     pos = nx.spring_layout(G, scale=500)
@@ -70,7 +64,6 @@ def process_implicational_graph(df, G):
     return G
 
 def process_language_graph(df, lang, G):
-    
     features = df[lang]
     labels   = df["Label"]
 
@@ -90,20 +83,8 @@ def process_language_graph(df, lang, G):
 
     pos = nx.spring_layout(G, scale=500)
     color_graph(G, pos=pos)
+
     return G
-
-def save_as_image(path):
-    pass
-
-def save_as_pdf(path):
-    with Image.open(path) as image: 
-        # convert the image to a PDF
-        pdf = img2pdf.convert(image.filename)
-        # write the PDF to its final destination
-        with open(f"./.pdf", "wb") as file:
-          file.write(pdf)
-          print(f"Converted {img} to pdf{ind+1}.pdf")
-
 
 if __name__ == "__main__":
     
@@ -116,7 +97,6 @@ if __name__ == "__main__":
               inplace=True)
 
     print(f"Languages contained in the current datafile: {possible_languages}")
-    print(df)
 
     G = graph_preprocessing(df)
 
