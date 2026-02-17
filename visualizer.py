@@ -8,12 +8,14 @@ import sys
 def visualize_graph(g, name, save=False):
     nt = Network(   directed=True,   
                     cdn_resources = "remote",
-                    select_menu = True,
-                    filter_menu = True,
+                    select_menu = False,
+                    filter_menu = False,
+                    height="100%",
+                    width="100%",
                     )
 
     nt.toggle_physics(False)
-    nt.show_buttons(filter_=['physics'])
+    # nt.show_buttons(filter_=['physics'])
     nt.from_nx(g)
 
     nt.show(f'{name}.html', notebook=False)
