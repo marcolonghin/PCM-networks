@@ -6,13 +6,14 @@ import numpy as np
 import sys
 
 def visualize_graph(g, name, save=False):
-    nt = Network(   directed=True,   
-                    cdn_resources = "remote",
-                    select_menu = False,
-                    filter_menu = False,
-                    height="100%",
-                    width="100%",
-                    )
+    nt = Network(
+        directed=True,
+        cdn_resources="remote",
+        select_menu=False,
+        filter_menu=False,
+        height="100vh",
+        width="100%"
+    )
 
     nt.toggle_physics(False)
     # nt.show_buttons(filter_=['physics'])
@@ -22,9 +23,9 @@ def visualize_graph(g, name, save=False):
     return nt
 
 def color_graph(G, pos=None):
-    leaf_nodes_color = "red" # es: "#79651f" -> dark brown                   
-    root_nodes_color = "green" # es: "#5a4c1a" -> yellow                     
-    other_nodes_color= "blue" # es: "#8f8877" -> clear gray                  
+    leaf_nodes_color = "red"              
+    root_nodes_color = "green"                    
+    other_nodes_color= "blue"                
                                                                             
     for node in G.nodes():
         if pos is not None:
@@ -55,7 +56,6 @@ def graph_preprocessing(df):
             G.add_edge(n, node)
 
     return G
-
 
 def process_implicational_graph(df, G):
     G.remove_nodes_from(list(nx.isolates(G)))
