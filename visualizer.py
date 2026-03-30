@@ -109,7 +109,7 @@ if __name__ == "__main__":
         G = process_language_graph(df, name, G)
 
     else:
-        name = "Implications"
+        name = "dependency_structure"
         G = process_implicational_graph(df, G)
 
     nt = visualize_graph(G, name)
