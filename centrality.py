@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import squareform
 from scipy.cluster import hierarchy
+from itertools import combinations
 
 # ===============================
 # PARAMETERS
@@ -17,7 +18,6 @@ LANGUAGES_TO_COMPARE = ["Man", "Blg", "It", "Fr", "Rm", "SC"]
 # ===============================
 
 df = pd.read_excel("TableA_94_2025.xlsx")
-# df.drop(df.columns[-5:], axis=1, inplace=True)
 
 labels = df["Label"].dropna().tolist()
 implications = df["Implicational Condition(s)"]
@@ -32,7 +32,7 @@ base_graph.add_nodes_from(labels)
 for node, imp in zip(labels, implications):
     if not pd.notna(imp):
         continue
-    imp = imp.translate({ord(k): " " for k in "()+-¬,−"})
+    imp = imp.translate({ord(k): " " for k in "()+-¬,-"})
     imp = imp.replace("or", " ")
     imp = imp.split()
     for n in imp:
@@ -147,12 +147,7 @@ def analyze_centrality(centrality_function, centrality_name, metric_label):
     
     plt.figure(figsize=(16, 8))
 
-    pairs = [
-        ("Man", "Blg"), ("Man", "It"), ("Blg", "It"),
-        ("Fr", "Blg"), ("Fr", "Man"), ("Fr", "It"),
-        ("Fr", "Rm"), ("Rm", "Blg"), ("Rm", "It"), ("Rm", "Man"),
-        ("SC", "Rm"), ("SC", "Blg"), ("SC", "It"), ("SC", "Man"), ("SC", "Fr")
-    ]
+    pairs = list(combinations(LANGUAGES_TO_COMPARE, 2))
 
     cmap = plt.get_cmap("tab20")
     colors = cmap(np.linspace(0, 1, len(pairs)))
@@ -246,25 +241,12 @@ def analyze_centrality(centrality_function, centrality_name, metric_label):
         plt.barh(df_plot["node"], df_plot["delta_similarity"])
         plt.axvline(0, linestyle="--")
         plt.xlabel("Δ Similarity")
-        plt.title(f"Most impactful nodes: {lang1}–{lang2}")
+        plt.title(f"Most impactful nodes: {lang1}-{lang2}")
         plt.tight_layout()
-        plt.show()
+        plt.close()
 
-    plot_node_impacts(impact_results[("Man", "Blg")], "Man", "Blg")
-    plot_node_impacts(impact_results[("Man", "It")], "Man", "It")
-    plot_node_impacts(impact_results[("Blg", "It")], "Blg", "It")
-    plot_node_impacts(impact_results[("Fr", "It")], "Fr", "It")
-    plot_node_impacts(impact_results[("Fr", "Rm")], "Fr", "Rm")
-    plot_node_impacts(impact_results[("Fr", "Blg")], "Fr", "Blg")
-    plot_node_impacts(impact_results[("Fr", "Man")], "Fr", "Man")
-    plot_node_impacts(impact_results[("Rm", "Blg")], "Rm", "Blg")
-    plot_node_impacts(impact_results[("Rm", "Man")], "Rm", "Man")
-    plot_node_impacts(impact_results[("Rm", "It")], "Rm", "It")
-    plot_node_impacts(impact_results[("SC", "Blg")], "SC", "Blg")
-    plot_node_impacts(impact_results[("SC", "Man")], "SC", "Man")
-    plot_node_impacts(impact_results[("SC", "It")], "SC", "It")
-    plot_node_impacts(impact_results[("SC", "Fr")], "SC", "Fr")
-    plot_node_impacts(impact_results[("SC", "Rm")], "SC", "Rm")
+    for l1, l2 in pairs:
+        plot_node_impacts(impact_results[(l1, l2)], l1, l2)
 
     # FULL CENTRALITY TABLE
 
